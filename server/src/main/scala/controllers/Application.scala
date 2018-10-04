@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class Application @Inject() (implicit val config: Configuration, env: Environment) extends Controller {
 
   def index = Action {
-    Ok(views.html.index("Lagom Scala.js react"))
+    Ok(views.html.index("Chirper"))
   }
 
 

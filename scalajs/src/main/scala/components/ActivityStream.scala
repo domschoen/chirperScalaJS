@@ -9,23 +9,23 @@ import japgolly.scalajs.react.vdom.html_<^._
 import scala.util.Random
 import scala.language.existentials
 
-object Dashboard {
+object ActivityStream {
 
-  case class Props()
+  case class Props(userId: String)
 
 
   protected class Backend($: BackendScope[Props, Unit]) {
 
     def render(props: Props): VdomElement = {
       <.div(
-        <.h2("Dashboard")
+        <.h2("ActivityStream")
       )
     }
   }
     // create the React component for Dashboard
-  private val component = ScalaComponent.builder[Props]("Dashboard")
+  private val component = ScalaComponent.builder[Props]("ActivityStream")
     .renderBackend[Backend]
     .build
 
-  def apply() = component(Props())
+  def apply(userId: String) = component(Props(userId))
 }

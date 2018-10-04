@@ -59,6 +59,7 @@ object Settings {
     "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1" % Test,
     "org.webjars" % "font-awesome" % "4.3.0-1" % Provided,
     "org.webjars" % "bootstrap" % versions.bootstrap % Provided,
+    //"org.webjars" % "normalize.css" % "2.1.3",
     "com.esotericsoftware.kryo" % "kryo" % "2.24.0",
     "com.lihaoyi" %% "utest" % versions.uTest % Test
   ))
