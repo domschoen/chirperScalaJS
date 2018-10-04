@@ -1,22 +1,23 @@
-/*
- * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
- */
 package controllers
 
+import play.api._
+import play.api.http._
 import play.api.mvc._
+import scalatags._
+import scalatags.Text._
+import scalatags.Text.all._
+import shared.SharedMessages
+import javax.inject.Inject
+import views.IndexView
+import views.MainView
 
-class Application extends Controller {
+class Application @Inject()(implicit env: play.Environment)
+    extends Controller {
+  def index = ok(IndexView(SharedMessages.itWorks))
 
-  def index = Action {
-    Ok(views.html.index.render())
-  }
-
-  def userStream(userId: String) = Action {
-    Ok(views.html.index.render())
-  }
-
-  def circuitBreaker = Action {
-    Ok(views.html.circuitbreaker.render())
+  def ok(view: Seq[Text.TypedTag[String]]) = Action {
+    implicit val codec = Codec.utf_8
+    Ok(MainView(view).toString).withHeaders(CONTENT_TYPE -> ContentTypes.HTML)
   }
 
 }

@@ -68,7 +68,7 @@ lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
     libraryDependencies ++= Settings.sharedDependencies.value
   )
   // set up settings specific to the JS project
-  .jsConfigure(_ enablePlugins ScalaJSWeb)
+  .jsConfigure(_ enablePlugins ScalaJSPlay)
 
 lazy val sharedJVM = shared.jvm.settings(name := "sharedJVM")
 
@@ -79,31 +79,20 @@ lazy val elideOptions = settingKey[Seq[String]]("Set limit for elidable function
 
 
 // instantiate the JS project for SBT with some additional settings
-lazy val client: Project = project("client")
+lazy val client: Project = project("scalajs")
   .settings(
     name := "client",
     version := Settings.version,
     scalaVersion := Settings.versions.scala,
-    scalacOptions ++= Settings.scalacOptions,
-    libraryDependencies ++= Settings.scalajsDependencies.value,
-    // by default we do development build, no eliding
-    //elideOptions := Seq("-Xelide-below", "WARNING"),
-    //elideOptions := Seq(),
-    elideOptions := Seq("-Xelide-below", sys.props.getOrElse("elide.below", "0")),
-    scalacOptions ++= elideOptions.value,
-    jsDependencies ++= Settings.jsDependencies.value,
-    // RuntimeDOM is needed for tests
-     jsDependencies += RuntimeDOM % "test",
-   // yes, we want to package JS dependencies
-    skip in packageJSDependencies := false,
-    // use Scala.js provided launcher code to start the client app
-    scalaJSUseMainModuleInitializer := true,
-    scalaJSUseMainModuleInitializer in Test := false,
-    // use uTest framework for tests
-    testFrameworks += new TestFramework("utest.runner.Framework")
+  persistLauncher := true,
+  persistLauncher in Test := false,
+  unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value),
+  libraryDependencies ++= Seq(
+    "org.scala-js" %%% "scalajs-dom" % "0.9.1",
+    "com.lihaoyi" %%% "scalatags" % "0.5.5"
   )
-  .enablePlugins(ScalaJSPlugin, ScalaJSWeb)
-  .dependsOn(sharedJS)
+).enablePlugins(ScalaJSPlugin, ScalaJSPlay)
+.dependsOn(sharedJS)
 
 // Client projects (just one in this case)
 lazy val clients = Seq(client)
@@ -115,22 +104,14 @@ lazy val server = project("server")
     name := "server",
     version := Settings.version,
     scalaVersion := Settings.versions.scala,
-    scalacOptions ++= Settings.scalacOptions,
-    libraryDependencies ++= Seq(ws) ++Settings.jvmDependencies.value,
-    commands += ReleaseCmd,
-    // triggers scalaJSPipeline when using compile or continuous compilation
-    compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
-    // connect to the client project
-    scalaJSProjects := clients,
-    pipelineStages in Assets := Seq(scalaJSPipeline),
-    pipelineStages := Seq(digest, gzip),
-    // compress CSS
-    LessKeys.compress in Assets := true
+  scalaJSProjects := clients,
+  libraryDependencies ++= Seq(
+    "com.lihaoyi" %% "scalatags" % "0.5.5",
+    "org.webjars" % "jquery" % "3.0.0"
   )
-  .enablePlugins(PlayScala, LagomPlay)
-  .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
-  .aggregate(clients.map(projectToRef): _*)
-  .dependsOn(sharedJVM)
+).enablePlugins(PlayScala, LagomPlay).
+  aggregate(clients.map(projectToRef): _*).
+  dependsOn(sharedJVM)
 
 // Command for building a release
 lazy val ReleaseCmd = Command.command("release") {
