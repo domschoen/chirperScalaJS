@@ -8,7 +8,7 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
 
-import shared.SharedMessages
+import shared.User
 import components.LoginPage
 import components.SignUpPage
 import components.UserPage

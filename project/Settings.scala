@@ -49,8 +49,7 @@ object Settings {
    * the special %%% function selects the correct version for each project
    */
   val sharedDependencies = Def.setting(Seq(
-    "com.lihaoyi" %%% "autowire" % versions.autowire,
-    "io.suzaku" %%% "boopickle" % versions.booPickle
+    "com.lihaoyi" %%% "upickle" % "0.6.6"
   ))
 
   /** Dependencies only used by the JVM project */

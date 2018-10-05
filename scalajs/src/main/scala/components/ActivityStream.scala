@@ -9,9 +9,11 @@ import japgolly.scalajs.react.vdom.html_<^._
 import scala.util.Random
 import scala.language.existentials
 
+import shared.User
+
 object ActivityStream {
 
-  case class Props(userId: String)
+  case class Props(user: User)
 
 
   protected class Backend($: BackendScope[Props, Unit]) {
@@ -27,5 +29,5 @@ object ActivityStream {
     .renderBackend[Backend]
     .build
 
-  def apply(userId: String) = component(Props(userId))
+  def apply(user: User) = component(Props(user))
 }
