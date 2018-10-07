@@ -50,16 +50,16 @@ object LoginPage {
       if (s.loginChecked) {
         s.user match {
           case Some(user) => {
+            // <PageLayout user={this.state.user} logout={this.logout}>
+            //                        {this.props.children}
+            //                    </PageLayout>
+            ActivityStream(user)
+          }
+          case None =>  {
             // <PageLayout showSignup={true}>
             // <ContentLayout subtitle="Login">
             //                            <LoginForm onLogin={this.handleLogin}/>
             //                        </ContentLayout>
-            ActivityStream(user)
-          }
-          case None =>  {
-            // <PageLayout user={this.state.user} logout={this.logout}>
-            //                        {this.props.children}
-            //                    </PageLayout>
             println("Install SignUpPage")
             SignUpPage()
           }

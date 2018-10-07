@@ -4,14 +4,11 @@ import japgolly.scalajs.react.extra.router._
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
 import org.scalajs.dom
+
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
-
-
 import shared.User
-import components.LoginPage
-import components.SignUpPage
-import components.UserPage
+import components.{AddFriendPage, LoginPage, SignUpPage, UserPage}
 
 
 @JSExportTopLevel("Main")
@@ -20,6 +17,7 @@ object Main extends js.JSApp {
   sealed trait Loc
   case object LoginLoc extends Loc
   case object SignupLoc extends Loc
+  case object AddFriendLoc extends Loc
   case class UserChirpLoc(userId: String) extends Loc
 
 
@@ -30,13 +28,14 @@ object Main extends js.JSApp {
     (emptyRule
       | staticRoute(root, LoginLoc) ~> render(LoginPage())
       | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage())
+      | staticRoute("#addFriend", AddFriendLoc) ~> renderR(ctl => AddFriendPage())
       | dynamicRouteCT("#users" / string(".*").caseClass[UserChirpLoc]) ~> dynRenderR(
       (m, ctl) => {
         UserPage(m.userId)
       })
     ).notFound(redirectToPage(LoginLoc)(Redirect.Replace))
 
-  }.renderWith(layout)
+  }
 
 
   def layout(c: RouterCtl[Loc], r: Resolution[Loc]) = {
