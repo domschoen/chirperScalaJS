@@ -26,7 +26,7 @@ object Main extends js.JSApp {
     import dsl._
 
     (emptyRule
-      | staticRoute(root, LoginLoc) ~> render(LoginPage())
+      | staticRoute(root, LoginLoc) ~> renderR(ctl => LoginPage(ctl))
       | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage())
       | staticRoute("#addFriend", AddFriendLoc) ~> renderR(ctl => AddFriendPage())
       | dynamicRouteCT("#users" / string(".*").caseClass[UserChirpLoc]) ~> dynRenderR(

@@ -8,7 +8,7 @@ import scala.language.existentials
 
 object AddFriendPage {
 
-  case class Props(user: User)
+  case class Props()
 
 
   protected class Backend($: BackendScope[Props, Unit]) {
@@ -24,5 +24,5 @@ object AddFriendPage {
     .renderBackend[Backend]
     .build
 
-  def apply(user: User) = component(Props(user))
+  def apply() = component(Props())
 }

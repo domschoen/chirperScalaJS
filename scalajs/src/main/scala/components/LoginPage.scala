@@ -1,5 +1,6 @@
 package components
 
+import client.Main.Loc
 import diode.data.Pot
 import diode.react._
 import japgolly.scalajs.react._
@@ -10,15 +11,17 @@ import scala.util.Random
 import scala.language.existentials
 import org.scalajs.dom
 import services.AjaxClient
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import shared.Keys
 import shared.User
 import dom.ext._
+
 import util._
 
 object LoginPage {
 
-  case class Props()
+  case class Props(ctl: RouterCtl[Loc])
   case class State(loginChecked: Boolean, user: Option[User])
 
 
@@ -45,6 +48,11 @@ object LoginPage {
       }
     }
 
+    def handleLogin(user: User): Callback = {
+      $.modState({sta:State => sta.copy(user = Some(user))})
+    }
+
+
     def render(props: Props, s: State): VdomElement = {
       println("render " + s)
       if (s.loginChecked) {
@@ -56,12 +64,16 @@ object LoginPage {
             ActivityStream(user)
           }
           case None =>  {
-            // <PageLayout showSignup={true}>
+            PageLayout(props.ctl, None, true, Callback.empty,
+              ContentLayout("Login",
+                LoginForm(handleLogin)
+              )
+            )
             // <ContentLayout subtitle="Login">
             //                            <LoginForm onLogin={this.handleLogin}/>
             //                        </ContentLayout>
-            println("Install SignUpPage")
-            SignUpPage()
+            //println("Install SignUpPage")
+            //SignUpPage()
           }
         }
       } else {
@@ -76,8 +88,8 @@ object LoginPage {
     .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 
-  def apply() = {
+  def apply(ctl: RouterCtl[Loc]) = {
     println("create Login Page")
-    component(Props())
+    component(Props(ctl))
   }
 }

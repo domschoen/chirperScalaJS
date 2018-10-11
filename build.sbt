@@ -112,6 +112,7 @@ lazy val server = project("server")
   .settings(
     name := "server",
     version := Settings.version,
+    routesGenerator := InjectedRoutesGenerator,
     scalaVersion := Settings.versions.scala,
     scalacOptions ++= Settings.scalacOptions,
     libraryDependencies ++= Settings.jvmDependencies.value,
