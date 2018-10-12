@@ -1,0 +1,22 @@
+> runAll
+[info] Starting embedded Cassandra server
+............
+[info] Cassandra server running at 127.0.0.1:4000
+[info] Service locator is running at http://localhost:8000
+[info] Service gateway is running at http://localhost:9000
+[info] p.c.s.NettyServer - Listening for HTTP on /0:0:0:0:0:0:0:0:28118
+[info] play.api.Play - Application started (Dev)
+SLF4J: javax.management.misc
+SLF4J: The following set of substitute loggers may have been accessed
+SLF4J: during the initialization phase. Logging calls during this
+SLF4J: phase were not honored. However, subsequent logging calls to these
+SLF4J: loggers will work as normally expected.
+SLF4J: See also http://www.slf4j.org/codes.html#substituteLogger
+SLF4J: javax.management.mbeanserver
+SLF4J: javax.management.mbeanserver
+[info] Service chirp-impl listening for HTTP on 0:0:0:0:0:0:0:0:23966
+[info] Service front-end listening for HTTP on 0:0:0:0:0:0:0:0:28118
+[info] Service friend-impl listening for HTTP on 0:0:0:0:0:0:0:0:21998
+[info] Service activity-stream-impl listening for HTTP on 0:0:0:0:0:0:0:0:27462
+[info] Service load-test-impl listening for HTTP on 0:0:0:0:0:0:0:0:21360
+[info] (Services started, use Ctrl+D to stop and go back to the console...)
