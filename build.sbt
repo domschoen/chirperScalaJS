@@ -125,7 +125,6 @@ lazy val server = project("server")
     pipelineStages := Seq(digest, gzip)
   )
   .enablePlugins(PlayScala, LagomPlay)
-  .disablePlugins(PlayLayoutPlugin) // use the standard directory layout instead of Play's custom
   .aggregate(clients.map(projectToRef): _*)
   .dependsOn(sharedJVM)
 

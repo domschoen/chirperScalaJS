@@ -1,13 +1,41 @@
 package components
-
+import client.Main.Loc
+import diode.data.Pot
+import diode.react._
 import japgolly.scalajs.react._
+import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.html_<^._
 
+import scala.util.Random
 import scala.language.existentials
+import org.scalajs.dom
+import services.AjaxClient
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import shared.Keys
 import shared.User
-import  client.Main.{Loc, LoginLoc, SignupLoc, AddFriendLoc}
+import dom.ext._
+import org.scalajs.dom.Event
+
+import scala.util.{Random, Success, Failure}
+import scala.language.existentials
+import org.scalajs.dom
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js.typedarray._
+import upickle.default._
+import shared.User
+import upickle.default.{macroRW, ReadWriter => RW}
+import org.scalajs.dom.ext.AjaxException
+import dom.ext.Ajax
+import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.router.RouterCtl
+import japgolly.scalajs.react.vdom.html_<^._
+import shared.Keys
+
+import util._
+import client.Main.{Loc, SignupLoc, LoginLoc, AddFriendLoc}
 
 object PageLayout {
 
@@ -28,10 +56,12 @@ object PageLayout {
       val links: VdomElement = props.user match  {
         case Some(user) => <.div(^.className := "tertiary-nav",
           props.router.link(AddFriendLoc)("Add Friend")
+        )
           //<Link to="/addFriend">Add Friend</Link>,
           //<Link to="/">Feed</Link>,
           //<Link to={"/users/" + this.props.user.userId }>{this.props.user.name}</Link>
-      )
+        case None =>
+          <.div("")
 
       }
 

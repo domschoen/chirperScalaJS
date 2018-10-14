@@ -16,6 +16,24 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import shared.Keys
 import shared.User
 import dom.ext._
+import org.scalajs.dom.Event
+
+import scala.util.{Random, Success, Failure}
+import scala.language.existentials
+import org.scalajs.dom
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js.typedarray._
+import upickle.default._
+import shared.User
+import upickle.default.{macroRW, ReadWriter => RW}
+import org.scalajs.dom.ext.AjaxException
+import dom.ext.Ajax
+import japgolly.scalajs.react._
+import japgolly.scalajs.react.extra.router.RouterCtl
+import japgolly.scalajs.react.vdom.html_<^._
+import shared.Keys
 
 import util._
 
@@ -28,22 +46,24 @@ object LoginPage {
   protected class Backend($: BackendScope[Props, State]) {
 
 
-    def mounted(p: Props) = {
+    def mounted(p: Props): japgolly.scalajs.react.Callback = {
       println("LoginPage mounted")
       val userId = dom.window.localStorage.getItem(Keys.userIdKey)
       if (userId != null) {
-        Callback.future(
-          AjaxClient.getUser(userId).map( u =>
-            u match {
-              case Some (fUser) =>
-                $.modState({sta:State => sta.copy(loginChecked = true, user = Some(fUser))})
-              case None =>
-                dom.window.localStorage.removeItem(Keys.userIdKey)
-                $.modState({sta:State => sta.copy(loginChecked = true)})
-            }
-          )
-        )
-        } else {
+        val f = Ajax.get("/api/users/" + userId)
+        f.onComplete {
+          case Success(r) =>
+            val user = read[User](r.responseText)
+            $.modState({sta:State => sta.copy(loginChecked = true, user = Some(user))})
+          case Failure(e) => {
+            println("Failure processing")
+
+            dom.window.localStorage.removeItem(Keys.userIdKey)
+            $.modState({sta:State => sta.copy(loginChecked = true)})
+          }
+        }
+        CallbackTo(f)
+      } else {
         $.modState({sta:State => sta.copy(loginChecked = true)})
       }
     }

@@ -23,4 +23,14 @@ class Application @Inject() (implicit val config: Configuration, env: Environmen
       }
       Ok("")
   }
+
+
+  def userStream(userId: String) = Action {
+    Ok(views.html.index("Chirper"))
+  }
+
+  def circuitBreaker = Action {
+    //Ok(views.html.circuitbreaker.render())
+    Ok(views.html.index("Chirper"))
+  }
 }

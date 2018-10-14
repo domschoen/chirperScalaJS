@@ -1,0 +1,19 @@
+query user WS at startup:
+
+http://localhost:9000/api/users/dom
+{"userId":"dom","name":"Dom","friends":["cathy"]}
+
+ws://localhost:9000/api/activity/dom/live
+http://localhost:9000/api/users/dom
+http://localhost:9000/api/users/cathy
+
+--------- with scala.js
+http://localhost:9000/api/users/dom
+{"name":"NotFound","detail":"user dom not found"}
+
+
+
+----------
+export JAVA_OPTS="-Xmx2g -XX:MaxMetaspaceSize=1g -Xss4m"
+
+
