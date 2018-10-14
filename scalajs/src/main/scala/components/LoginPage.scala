@@ -49,6 +49,8 @@ object LoginPage {
     def mounted(p: Props): japgolly.scalajs.react.Callback = {
       println("LoginPage mounted")
       val userId = dom.window.localStorage.getItem(Keys.userIdKey)
+      println("LoginPage mounted | user ID:" + userId)
+
       if (userId != null) {
         val f = Ajax.get("/api/users/" + userId)
         f.onComplete {

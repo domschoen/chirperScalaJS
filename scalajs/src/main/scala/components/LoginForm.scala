@@ -2,7 +2,7 @@ package components
 
 import org.scalajs.dom.Event
 
-import scala.util.{Random, Success, Failure}
+import scala.util.{Failure, Random, Success}
 import scala.language.existentials
 import org.scalajs.dom
 
@@ -54,10 +54,25 @@ object LoginForm {
       }
     }
 
+    def handleUserIdChange(e: ReactEventFromInput) = {
+      val newUserId = if (e.target.value == null) None else Some(e.target.value)
+      $.modState(_.copy(userId = newUserId))
+    }
 
     def render(props: Props, s: State): VdomElement = {
-      <.div(
-        <.h2("LoginForm")
+      val valueString = if (s.userId.isDefined) s.userId.get else ""
+      Section(
+        <.div(^.className := "small-12 large-4 columns",
+          <.form(^.className := "loginForm", ^.onSubmit ==> { e: ReactEventFromInput => handleSubmit(props, s, e)},
+            <.input.text(^.placeholder := "Username...", ^.value := valueString,
+              ^.onChange ==> { e: ReactEventFromInput => handleUserIdChange(e)}),
+            (s.error match {
+              case Some(errorMsg) => errorMsg
+              case None => ""
+            }),
+            <.input.submit(^.value := "Login")
+          )
+        )
       )
     }
   }
