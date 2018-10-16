@@ -37,7 +37,9 @@ import shared.Keys
 
 import util._
 
-object LoginPage {
+
+// Translation of App
+object AppPage {
 
   case class Props(ctl: RouterCtl[Loc])
   case class State(loginChecked: Boolean, user: Option[User])
@@ -52,19 +54,22 @@ object LoginPage {
       println("LoginPage mounted | user ID:" + userId)
 
       if (userId != null) {
-        val f = Ajax.get("/api/users/" + userId)
-        f.onComplete {
-          case Success(r) =>
-            val user = read[User](r.responseText)
-            $.modState({sta:State => sta.copy(loginChecked = true, user = Some(user))})
-          case Failure(e) => {
-            println("Failure processing")
+        val request = Ajax.get("/api/users/" + userId).recover {
+          // Recover from a failed error code into a successful future
+          case dom.ext.AjaxException(req) => req
+        }.map( r =>
+          r.status match {
+            case 200 =>
+              val user = read[User](r.responseText)
+              $.modState({sta:State => sta.copy(loginChecked = true, user = Some(user))})
+            case _ =>
+              println("Failure processing")
 
-            dom.window.localStorage.removeItem(Keys.userIdKey)
-            $.modState({sta:State => sta.copy(loginChecked = true)})
+              dom.window.localStorage.removeItem(Keys.userIdKey)
+              $.modState({sta:State => sta.copy(loginChecked = true)})
           }
-        }
-        CallbackTo(f)
+        )
+        Callback.future(request)
       } else {
         $.modState({sta:State => sta.copy(loginChecked = true)})
       }
@@ -104,13 +109,13 @@ object LoginPage {
     }
   }
   // create the React component for Dashboard
-  private val component = ScalaComponent.builder[Props]("LoginPage")
+  private val component = ScalaComponent.builder[Props]("AppPage")
     .initialState(State(false, None))
     .renderBackend[Backend]
     .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 
-  def apply(ctl: RouterCtl[Loc]) = {
+  def apply(ctl: RouterCtl[Loc], userId: String) = {
     println("create Login Page")
     component(Props(ctl))
   }

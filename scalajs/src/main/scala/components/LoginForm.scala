@@ -34,18 +34,22 @@ object LoginForm {
           case Some(id) =>
             val trimID: String =  id.trim()
             if (trimID.length > 0) {
-              val f = Ajax.get("/api/users/" + trimID)
-              f.onComplete{
-                case Success(r) =>
-                  val user = read[User](r.responseText)
-                  dom.window.localStorage.setItem(Keys.userIdKey, trimID)
-                  p.onLogin(user)
-                case Failure(e) => {
-                  val errorMsg = "User " + trimID + " does not exist."
-                  $.modState(_.copy(error = Some(errorMsg)))
+              val request = Ajax.get("/api/users/" + trimID).recover {
+                // Recover from a failed error code into a successful future
+                case dom.ext.AjaxException(req) => req
+              }.map( r =>
+                r.status match {
+                  case 200 =>
+                    val user = read[User](r.responseText)
+                    dom.window.localStorage.setItem(Keys.userIdKey, trimID)
+                    p.onLogin(user)
+                  case _ =>
+                    println("User not found " + s.error)
+                    val errorMsg = "User " + trimID + " does not exist."
+                    $.modState(_.copy(error = Some(errorMsg)))
                 }
-              }
-              CallbackTo(f)
+              )
+              Callback.future(request)
             } else Callback.empty
 
           case None =>
@@ -61,15 +65,16 @@ object LoginForm {
 
     def render(props: Props, s: State): VdomElement = {
       val valueString = if (s.userId.isDefined) s.userId.get else ""
+      val errorMsg = if (s.error.isDefined) s.error.get else ""
+      println("Render with error " + s.error)
       Section(
         <.div(^.className := "small-12 large-4 columns",
           <.form(^.className := "loginForm", ^.onSubmit ==> { e: ReactEventFromInput => handleSubmit(props, s, e)},
             <.input.text(^.placeholder := "Username...", ^.value := valueString,
               ^.onChange ==> { e: ReactEventFromInput => handleUserIdChange(e)}),
-            (s.error match {
-              case Some(errorMsg) => errorMsg
-              case None => ""
-            }),
+            {
+              components.Error(errorMsg)
+            }.when(s.error.isDefined),
             <.input.submit(^.value := "Login")
           )
         )

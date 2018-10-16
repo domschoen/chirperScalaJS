@@ -8,7 +8,7 @@ import org.scalajs.dom
 import scala.scalajs.js
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 import shared.User
-import components.{AddFriendPage, LoginPage, SignUpPage, UserPage}
+import components.{AddFriendPage, AppPage, SignUpPage}
 
 
 @JSExportTopLevel("Main")
@@ -26,12 +26,13 @@ object Main extends js.JSApp {
     import dsl._
 
     (emptyRule
-      | staticRoute(root, LoginLoc) ~> renderR(ctl => LoginPage(ctl))
-      | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage())
+      | staticRoute(root, LoginLoc) ~> renderR(ctl => AppPage(ctl, null))
+      | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage(ctl))
+      | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage(ctl))
       | staticRoute("#addFriend", AddFriendLoc) ~> renderR(ctl => AddFriendPage())
       | dynamicRouteCT("#users" / string(".*").caseClass[UserChirpLoc]) ~> dynRenderR(
       (m, ctl) => {
-        UserPage(m.userId)
+        AppPage(ctl, m.userId)
       })
     ).notFound(redirectToPage(LoginLoc)(Redirect.Replace))
 
