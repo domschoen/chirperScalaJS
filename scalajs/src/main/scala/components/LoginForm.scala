@@ -8,7 +8,6 @@ import org.scalajs.dom
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.scalajs.js.typedarray._
 import upickle.default._
 import shared.User
 import upickle.default.{macroRW, ReadWriter => RW}
@@ -17,6 +16,7 @@ import dom.ext.Ajax
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.html_<^._
+import services.UserUtils
 import shared.Keys
 
 object LoginForm {
@@ -27,6 +27,8 @@ object LoginForm {
 
   protected class Backend($: BackendScope[Props, State]) {
 
+
+
     // user has entered the user Id and submit it
     def handleSubmit(p: Props, s: State, e: ReactEventFromInput): Callback = {
       e.preventDefaultCB >> {
@@ -34,21 +36,15 @@ object LoginForm {
           case Some(id) =>
             val trimID: String =  id.trim()
             if (trimID.length > 0) {
-              val request = Ajax.get("/api/users/" + trimID).recover {
-                // Recover from a failed error code into a successful future
-                case dom.ext.AjaxException(req) => req
-              }.map( r =>
-                r.status match {
-                  case 200 =>
-                    val user = read[User](r.responseText)
-                    dom.window.localStorage.setItem(Keys.userIdKey, trimID)
-                    p.onLogin(user)
-                  case _ =>
-                    println("User not found " + s.error)
-                    val errorMsg = "User " + trimID + " does not exist."
-                    $.modState(_.copy(error = Some(errorMsg)))
-                }
-              )
+              val request = UserUtils.getUser(trimID, { user => {
+                dom.window.localStorage.setItem(Keys.userIdKey, trimID)
+                p.onLogin(user)
+              }},
+              {
+                println("User not found " + s.error)
+                val errorMsg = "User " + trimID + " does not exist."
+                $.modState(_.copy(error = Some(errorMsg)))
+              })
               Callback.future(request)
             } else Callback.empty
 

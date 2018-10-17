@@ -1,7 +1,9 @@
 package shared
 
 
-import upickle.default.{ReadWriter => RW, macroRW}
+import java.util.UUID
+
+import upickle.default.{macroRW, ReadWriter => RW}
 
 
 object Keys  {
@@ -19,7 +21,16 @@ object PostedMessage{
   implicit def rw: RW[PostedMessage] = macroRW
 }
 
-case class Chirp(userId: String, name: String, friends: List[String])
+
+// Chirp message receive with WS:
+// {"userId":"Jean","message":"This is my new message","timestamp":1539760786.932000000,"uuid":"138036c1-97ab-4dac-a6b2-3fa8f3572c57"}	1539760894.5932655
+case class Chirp(userId: String, message: String, uuid: UUID)
 object Chirp{
   implicit def rw: RW[Chirp] = macroRW
+}
+
+
+case class StreamForUsers(userIds: List[String])
+object StreamForUsers{
+  implicit def rw: RW[StreamForUsers] = macroRW
 }
