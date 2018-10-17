@@ -41,7 +41,7 @@ import util._
 // Translation of App
 object AppPage {
 
-  case class Props(ctl: RouterCtl[Loc])
+  case class Props(ctl: RouterCtl[Loc], userId: Option[String], showAddFriends: Boolean)
   case class State(loginChecked: Boolean, user: Option[User])
 
 
@@ -79,19 +79,27 @@ object AppPage {
       $.modState({sta:State => sta.copy(user = Some(user))})
     }
 
+    def logout(e: ReactEventFromInput): Callback = {
+      e.preventDefaultCB >> {
+        dom.window.localStorage.removeItem(Keys.userIdKey)
+        $.modState({sta:State => sta.copy(user = None)})
+      }
+    }
+
 
     def render(props: Props, s: State): VdomElement = {
       println("render " + s)
       if (s.loginChecked) {
         s.user match {
           case Some(user) => {
-            // <PageLayout user={this.state.user} logout={this.logout}>
-            //                        {this.props.children}
-            //                    </PageLayout>
-            ActivityStream(user)
+            // Todo: set UserChirps if userID
+            // Todo: set AddFriendPage if showAddFriends
+            PageLayout(props.ctl, Some(user), false, logout,
+              ActivityStream(user)
+            )
           }
           case None =>  {
-            PageLayout(props.ctl, None, true, Callback.empty,
+            PageLayout(props.ctl, None, true, e => Callback.empty,
               ContentLayout("Login",
                 LoginForm(handleLogin)
               )
@@ -115,8 +123,8 @@ object AppPage {
     .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 
-  def apply(ctl: RouterCtl[Loc], userId: String) = {
+  def apply(ctl: RouterCtl[Loc], userId: Option[String], showAddFriends: Boolean) = {
     println("create Login Page")
-    component(Props(ctl))
+    component(Props(ctl, userId, showAddFriends))
   }
 }

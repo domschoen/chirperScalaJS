@@ -39,14 +39,14 @@ import client.Main.{Loc, SignupLoc, LoginLoc, AddFriendLoc}
 
 object PageLayout {
 
-  case class Props(router: RouterCtl[Loc], user: Option[User], showSignup: Boolean, logout: Callback)
+  case class Props(router: RouterCtl[Loc], user: Option[User], showSignup: Boolean, logout: ReactEventFromInput => Callback)
 
 
     // create the React component for Dashboard
   private val component = ScalaComponent.builder[Props]("PageLayout")
     .renderPC((_, props, c) => {
       val button: VdomElement = props.user match  {
-        case Some(user) => <.a(^.className := "btn", ^.href :="#", ^.onClick --> props.logout, "Logout")
+        case Some(user) => <.a(^.className := "btn", ^.href :="#", ^.onClick ==> props.logout, "Logout")
         case None => if (props.showSignup) {
           props.router.link(SignupLoc)("Sign up", ^.className := "btn")
         } else {
@@ -88,6 +88,6 @@ object PageLayout {
 
 
 
-  def apply(router: RouterCtl[Loc], user: Option[User], showSignup: Boolean, logout: Callback,  children: VdomNode*) =
+  def apply(router: RouterCtl[Loc], user: Option[User], showSignup: Boolean, logout: ReactEventFromInput => Callback,  children: VdomNode*) =
     component(Props(router,user,showSignup,logout))(children: _*)
 }

@@ -80,7 +80,7 @@ object SignUpPage {
       val nameString = if (s.name.isDefined) s.name.get else ""
       val errorMsg = if (s.error.isDefined) s.error.get else ""
 
-      PageLayout(props.ctl, None, true, Callback.empty,
+      PageLayout(props.ctl, None, true, e => Callback.empty,
         ContentLayout("Sign up",
           Section(
             <.div(^.className := "small-12 large-4 columns",

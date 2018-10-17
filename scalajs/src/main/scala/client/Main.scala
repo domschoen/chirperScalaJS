@@ -26,13 +26,13 @@ object Main extends js.JSApp {
     import dsl._
 
     (emptyRule
-      | staticRoute(root, LoginLoc) ~> renderR(ctl => AppPage(ctl, null))
+      | staticRoute(root, LoginLoc) ~> renderR(ctl => AppPage(ctl, None, false))
       | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage(ctl))
       | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage(ctl))
-      | staticRoute("#addFriend", AddFriendLoc) ~> renderR(ctl => AddFriendPage())
+      | staticRoute("#addFriend", AddFriendLoc) ~> renderR(ctl => AppPage(ctl, None, true))
       | dynamicRouteCT("#users" / string(".*").caseClass[UserChirpLoc]) ~> dynRenderR(
       (m, ctl) => {
-        AppPage(ctl, m.userId)
+        AppPage(ctl, Some(m.userId), false)
       })
     ).notFound(redirectToPage(LoginLoc)(Redirect.Replace))
 
