@@ -39,6 +39,7 @@ object StreamUtils {
       }
       socket.onmessage = (e: MessageEvent) => {
         val chirp = read[Chirp](e.data.toString);
+        println("Socket received chirp " + chirp)
         onChirp(chirp);
       }
     }

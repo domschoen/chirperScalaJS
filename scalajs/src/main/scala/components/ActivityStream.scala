@@ -1,7 +1,6 @@
 package components
 
-import diode.data.Pot
-import diode.react._
+import client.Main.Loc
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.html_<^._
@@ -14,7 +13,7 @@ import shared.{Keys, User}
 
 object ActivityStream {
 
-  case class Props(user: User)
+  case class Props(router: RouterCtl[Loc],user: User)
   case class State(users: Map[String, User])
 
 
@@ -30,7 +29,7 @@ object ActivityStream {
         Section(
           <.div(^.className := "small-12 columns",
             ChirpForm(),
-            ChirpStream(StreamUtils.createActivityStream(userId), s.users)
+            ChirpStream(props.router, StreamUtils.createActivityStream(userId), s.users)
           )
         )
       )
@@ -43,5 +42,5 @@ object ActivityStream {
     .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 
-  def apply(user: User) = component(Props(user))
+  def apply(router: RouterCtl[Loc],user: User) = component(Props(router, user))
 }

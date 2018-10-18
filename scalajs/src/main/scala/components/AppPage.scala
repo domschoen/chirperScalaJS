@@ -1,8 +1,6 @@
 package components
 
 import client.Main.Loc
-import diode.data.Pot
-import diode.react._
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.html_<^._
@@ -95,7 +93,7 @@ object AppPage {
             // Todo: set UserChirps if userID
             // Todo: set AddFriendPage if showAddFriends
             PageLayout(props.ctl, Some(user), false, logout,
-              ActivityStream(user)
+              ActivityStream(props.ctl, user)
             )
           }
           case None =>  {
