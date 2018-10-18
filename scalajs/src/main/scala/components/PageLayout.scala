@@ -1,5 +1,5 @@
 package components
-import client.Main.Loc
+import client.Main._
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react.vdom.html_<^._
@@ -15,7 +15,7 @@ import shared.User
 import dom.ext._
 import org.scalajs.dom.Event
 
-import scala.util.{Random, Success, Failure}
+import scala.util.{Failure, Random, Success}
 import scala.language.existentials
 import org.scalajs.dom
 
@@ -33,7 +33,6 @@ import japgolly.scalajs.react.vdom.html_<^._
 import shared.Keys
 
 import util._
-import client.Main.{Loc, SignupLoc, LoginLoc, AddFriendLoc}
 
 object PageLayout {
 
@@ -53,11 +52,10 @@ object PageLayout {
       }
       val links: VdomElement = props.user match  {
         case Some(user) => <.div(^.className := "tertiary-nav",
-          props.router.link(AddFriendLoc)("Add Friend")
+          props.router.link(AddFriendLoc)("Add Friend"),
+          props.router.link(LoginLoc)("Feed"),
+          props.router.link(UserChirpLoc(user.userId))(user.name)
         )
-          //<Link to="/addFriend">Add Friend</Link>,
-          //<Link to="/">Feed</Link>,
-          //<Link to={"/users/" + this.props.user.userId }>{this.props.user.name}</Link>
         case None =>
           <.div("")
 
@@ -70,7 +68,7 @@ object PageLayout {
             <.div(^.className := "small-9 columns",
               <.nav(
                 <.div(^.className := "tertiary-nav",
-                  <.div(^.className := "tertiary-nav")
+                  links
                 ),
                 <.div(^.className := "primary-nav",
                   button

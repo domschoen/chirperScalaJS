@@ -90,10 +90,20 @@ object AppPage {
       if (s.loginChecked) {
         s.user match {
           case Some(user) => {
-            // Todo: set UserChirps if userID
-            // Todo: set AddFriendPage if showAddFriends
+            // set UserChirps if userID
+            // set AddFriendPage if showAddFriends
+            val subComponent = if (props.showAddFriends) {
+              AddFriendPage(props.ctl)
+            } else {
+              props.userId match {
+                case Some(uid) =>
+                  UserChirps(props.ctl, uid)
+                case None =>
+                  ActivityStream(props.ctl, user)
+              }
+            }
             PageLayout(props.ctl, Some(user), false, logout,
-              ActivityStream(props.ctl, user)
+              subComponent
             )
           }
           case None =>  {
@@ -102,11 +112,6 @@ object AppPage {
                 LoginForm(handleLogin)
               )
             )
-            // <ContentLayout subtitle="Login">
-            //                            <LoginForm onLogin={this.handleLogin}/>
-            //                        </ContentLayout>
-            //println("Install SignUpPage")
-            //SignUpPage()
           }
         }
       } else {

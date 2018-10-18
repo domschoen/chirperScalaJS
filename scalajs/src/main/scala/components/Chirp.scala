@@ -20,8 +20,8 @@ object Chirp {
         <.h3(^.className := "fw-chirpUser",
           p.router.link(UserChirpLoc(p.userId))(p.userName)
         ),
-        <.hr(),
-        c
+        c,
+        <.hr()
       )
     ).build
 

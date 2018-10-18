@@ -18,7 +18,7 @@ object ContentLayout {
         <.section(^.id := "top",
           <.div(^.className := "row",
             <.header(^.className := "large-12 columns",
-              <.h1()
+              <.h1(p.subtitle)
             )
           )
         ),
