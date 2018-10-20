@@ -35,7 +35,7 @@ object AddFriendPage {
           case Some(id) =>
             val friendId: String =  id.trim()
             if (friendId.length > 0) {
-              val request = UserUtils.getUser(friendId, { user => {
+              val request = UserUtils.getUser(friendId, { friend => {
                 val userId = dom.window.localStorage.getItem(Keys.userIdKey)
                 val request = Ajax.post(
                   url = "/api/users" + userId + "/friends",
