@@ -2,13 +2,10 @@ package services
 
 import japgolly.scalajs.react.{Callback, CallbackTo}
 import org.scalajs.dom
-import org.scalajs.dom.raw.MessageEvent
 import org.scalajs.dom.{CloseEvent, Event, MessageEvent, WebSocket}
 import shared.{Chirp, StreamForUsers}
 import upickle.default.write
 import upickle.default._
-import shared.User
-import upickle.default.{macroRW, ReadWriter => RW}
 
 object StreamUtils {
   val baseWebsocketUrl = s"ws://${dom.document.location.host}"

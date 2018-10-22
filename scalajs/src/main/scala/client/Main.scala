@@ -28,7 +28,6 @@ object Main extends js.JSApp {
     (emptyRule
       | staticRoute(root, LoginLoc) ~> renderR(ctl => AppPage(ctl, None, false))
       | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage(ctl))
-      | staticRoute("#signup", SignupLoc) ~> renderR(ctl => SignUpPage(ctl))
       | staticRoute("#addFriend", AddFriendLoc) ~> renderR(ctl => AppPage(ctl, None, true))
       | dynamicRouteCT("#users" / string(".*").caseClass[UserChirpLoc]) ~> dynRenderR(
       (m, ctl) => {
