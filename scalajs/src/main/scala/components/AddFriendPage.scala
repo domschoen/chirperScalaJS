@@ -31,6 +31,7 @@ object AddFriendPage {
   protected class Backend($: BackendScope[Props, State]) {
     def handleSubmit(p: Props, s: State, e: ReactEventFromInput): Callback = {
       e.preventDefaultCB >> {
+        println("AddFriendPage | handleSubmit | s.friendId " + s.friendId)
         s.friendId match {
           case Some(id) =>
             val friendId: String =  id.trim()
@@ -38,7 +39,7 @@ object AddFriendPage {
               val request = UserUtils.getUser(friendId, { friend => {
                 val userId = dom.window.localStorage.getItem(Keys.userIdKey)
                 val request = Ajax.post(
-                  url = "/api/users" + userId + "/friends",
+                  url = "/api/users/" + userId + "/friends",
                   data = write(PostFriendId(friendId))
                 ).recover {
                   // Recover from a failed error code into a successful future
@@ -73,6 +74,7 @@ object AddFriendPage {
 
 
     def render(props: Props, s: State): VdomElement = {
+      println("AddFriendPage | render" )
       val valueString = if (s.friendId.isDefined) s.friendId.get else ""
       val errorMsg = if (s.error.isDefined) s.error.get else ""
       ContentLayout("Add friend",
