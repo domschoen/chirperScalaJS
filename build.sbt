@@ -175,7 +175,7 @@ def project(id: String) = Project(id, base = file(id))
   )
 
 // do not delete database files on start
-lagomCassandraCleanOnStart in ThisBuild := true
+lagomCassandraCleanOnStart in ThisBuild := false
 
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 
