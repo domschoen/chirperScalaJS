@@ -55,7 +55,7 @@ object UserChirps {
               Section(
                 <.div(^.className := "small-12 columns",
                   ChirpForm().when(showChirpForm),
-                  ChirpStream(props.router, StreamUtils.createActivityStream(userId), users)
+                  ChirpStream(props.router, StreamUtils.createUserStream(userId), users)
                 )
               )
             )
