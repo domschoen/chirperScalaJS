@@ -29,7 +29,7 @@ object ChirpStream{
     }
 
     def mounted(p: Props, s: State): japgolly.scalajs.react.Callback = {
-      //println("ChirpStream mounted")
+      println("ChirpStream mounted")
       loadingUsers = Map()
       p.stream.connect(addChirp)
       Callback.empty

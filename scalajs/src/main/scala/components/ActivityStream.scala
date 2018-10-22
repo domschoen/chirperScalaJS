@@ -18,10 +18,6 @@ object ActivityStream {
 
 
   protected class Backend($: BackendScope[Props, State]) {
-    def mounted(p: Props): japgolly.scalajs.react.Callback = {
-      println("LoginPage mounted")
-      Callback.empty
-    }
 
     def render(props: Props, s: State): VdomElement = {
       val userId = dom.window.localStorage.getItem(Keys.userIdKey)
@@ -39,7 +35,6 @@ object ActivityStream {
   private val component = ScalaComponent.builder[Props]("ActivityStream")
     .initialState(State(Map()))
     .renderBackend[Backend]
-    .componentDidMount(scope => scope.backend.mounted(scope.props))
     .build
 
   def apply(router: RouterCtl[Loc],user: User) = component(Props(router, user))

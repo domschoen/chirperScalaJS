@@ -39,7 +39,7 @@ object ChirpForm {
                   case 200 =>
                     $.modState(_.copy(message = None))
                   case _ =>
-                    println("ChirpForm | url " +  postUrl + " error: " + r.status + " with message: " + r.responseText)
+                    //println("ChirpForm | url " +  postUrl + " error: " + r.status + " with message: " + r.responseText)
                     Callback.empty
                 }
               )
@@ -59,7 +59,7 @@ object ChirpForm {
 
     def render(props: Props, s: State): VdomElement = {
       val valueString = if (s.message.isDefined) s.message.get else ""
-      println("ChirpForm | render with value " + valueString)
+      //println("ChirpForm | render with value " + valueString)
       <.form(^.className := "chirpForm", ^.onSubmit ==> { e: ReactEventFromInput => handleSubmit(props, s, e)},
         <.input.text(^.placeholder := "Say something...",^.maxLength := 140,  ^.value := valueString,
           ^.onChange ==> { e: ReactEventFromInput => handleMessageChange(e)}),

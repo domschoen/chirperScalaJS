@@ -27,8 +27,6 @@ object LoginForm {
 
   protected class Backend($: BackendScope[Props, State]) {
 
-
-
     // user has entered the user Id and submit it
     def handleSubmit(p: Props, s: State, e: ReactEventFromInput): Callback = {
       e.preventDefaultCB >> {
@@ -41,7 +39,7 @@ object LoginForm {
                 p.onLogin(user)
               }},
               {
-                println("User not found " + s.error)
+                //println("User not found " + s.error)
                 val errorMsg = "User " + trimID + " does not exist."
                 $.modState(_.copy(error = Some(errorMsg)))
               })
@@ -62,7 +60,7 @@ object LoginForm {
     def render(props: Props, s: State): VdomElement = {
       val valueString = if (s.userId.isDefined) s.userId.get else ""
       val errorMsg = if (s.error.isDefined) s.error.get else ""
-      println("Render with error " + s.error)
+      //println("Render with error " + s.error)
       Section(
         <.div(^.className := "small-12 large-4 columns",
           <.form(^.className := "loginForm", ^.onSubmit ==> { e: ReactEventFromInput => handleSubmit(props, s, e)},

@@ -12,7 +12,9 @@ object StreamUtils {
 
 
   case class Socket(url: String, userId: Option[String]) {
-    private val socket: WebSocket = new dom.WebSocket(url = baseWebsocketUrl + url)
+    private val socketUrl = baseWebsocketUrl + url
+    println("Create socket on: " + socketUrl)
+    private val socket: WebSocket = new dom.WebSocket(url = socketUrl)
 
     def close() = {
       socket.close()

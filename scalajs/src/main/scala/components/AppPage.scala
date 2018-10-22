@@ -47,9 +47,9 @@ object AppPage {
 
 
     def mounted(p: Props): japgolly.scalajs.react.Callback = {
-      println("LoginPage mounted")
+      //println("LoginPage mounted")
       val userId = dom.window.localStorage.getItem(Keys.userIdKey)
-      println("LoginPage mounted | user ID:" + userId)
+      //println("LoginPage mounted | user ID:" + userId)
 
       if (userId != null) {
         val request = Ajax.get("/api/users/" + userId).recover {
@@ -61,7 +61,7 @@ object AppPage {
               val user = read[User](r.responseText)
               $.modState({sta:State => sta.copy(loginChecked = true, user = Some(user))})
             case _ =>
-              println("Failure processing")
+              //println("Failure processing")
 
               dom.window.localStorage.removeItem(Keys.userIdKey)
               $.modState({sta:State => sta.copy(loginChecked = true)})
@@ -86,7 +86,7 @@ object AppPage {
 
 
     def render(props: Props, s: State): VdomElement = {
-      println("render " + s)
+      //println("render " + s)
       if (s.loginChecked) {
         s.user match {
           case Some(user) => {
@@ -127,7 +127,7 @@ object AppPage {
     .build
 
   def apply(ctl: RouterCtl[Loc], userId: Option[String], showAddFriends: Boolean) = {
-    println("create Login Page")
+    //println("create Login Page")
     component(Props(ctl, userId, showAddFriends))
   }
 }
