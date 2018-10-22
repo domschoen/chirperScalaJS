@@ -31,7 +31,6 @@ object Settings {
     val log4js = "1.4.10"
     val autowire = "0.2.6"
     val booPickle = "1.3.0"
-    val diode = "1.1.2"
     val uTest = "0.4.7"
 
     val react = "15.6.1"
@@ -68,8 +67,6 @@ object Settings {
     "com.github.japgolly.scalajs-react" %%% "core" % versions.scalajsReact,
     "com.github.japgolly.scalajs-react" %%% "extra" % versions.scalajsReact,
     "com.github.japgolly.scalacss" %%% "ext-react" % versions.scalaCSS,
-    "io.suzaku" %%% "diode" % versions.diode,
-    "io.suzaku" %%% "diode-react" % versions.diode,
     "org.scala-js" %%% "scalajs-dom" % versions.scalaDom,
     "com.lihaoyi" %%% "utest" % versions.uTest % Test
   ))
