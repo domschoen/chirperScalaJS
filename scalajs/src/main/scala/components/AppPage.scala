@@ -86,7 +86,7 @@ object AppPage {
 
 
     def render(props: Props, s: State): VdomElement = {
-      //println("render " + s)
+      println("AppPage | render with state: " + s)
       if (s.loginChecked) {
         s.user match {
           case Some(user) => {
