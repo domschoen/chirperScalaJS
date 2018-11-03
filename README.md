@@ -3,9 +3,9 @@
 Chirper, the famous Lagom example from Lightbend, has a frontend in Javascript. This project has a translation of the Javascript in Scala.js
 
 It uses:
-    - Scala.js
-    - ScalaReact
-    - upickle (for case class to JSON and reverse)
+ - Scala.js
+ - ScalaReact
+ - upickle (for case class to JSON and reverse)
 
 ## Current state
 Working like original Chirper in Javascript.
